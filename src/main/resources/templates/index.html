@@ -104,38 +104,66 @@
     </div>
 
     <script>
-        // Function to check code errors using polling
-        function checkCodeErrors() {
-            const code = document.getElementById('codeInput').value;
+		let pollingInterval = null; // Holds the polling interval
+		let isFocused = false; // Tracks whether the input is focused
 
-            axios.post('/check-code', { code: code })
-                .then(response => {
-                    const errors = response.data.errors;
-                    let errorMessages = '';
-                    if (errors.length > 0) {
-                        errorMessages = '<ul>';
-                        errors.forEach(error => {
-                            errorMessages += `<li>${error}</li>`;
-                        });
-                        errorMessages += '</ul>';
-                    } else {
-                        errorMessages = '<p>No errors found!</p>';
-                    }
-                    document.getElementById('errorMessages').innerHTML = errorMessages;
-                })
-                .catch(error => {
-                    console.error('Error checking code:', error);
-                });
-        }
+		// Function to check code errors using polling
+		function checkCodeErrors() {
+		    const code = document.getElementById('codeInput').value;
 
-        // Polling every 3 seconds
-        setInterval(checkCodeErrors, 3000);
+		    axios.post('/check-code', { code: code })
+		        .then(response => {
+		            const errors = response.data.errors;
+		            let errorMessages = '';
+		            if (errors.length > 0) {
+		                errorMessages = '<ul>';
+		                errors.forEach(error => {
+		                    errorMessages += `<li>${error}</li>`;
+		                });
+		                errorMessages += '</ul>';
+		            } else {
+		                errorMessages = '<p>No errors found!</p>';
+		            }
+		            document.getElementById('errorMessages').innerHTML = errorMessages;
+		        })
+		        .catch(error => {
+		            console.error('Error checking code:', error);
+		        });
+		}
 
-        // Form submission to trigger error checking
-        document.getElementById('codeForm').addEventListener('submit', function(event) {
-            event.preventDefault();
-            checkCodeErrors();
-        });
+		// Start polling if the user is focused
+		function startPolling() {
+		    if (pollingInterval === null) {
+		        pollingInterval = setInterval(checkCodeErrors, 3000);
+		    }
+		}
+
+		// Stop polling when the user is not focused
+		function stopPolling() {
+		    if (pollingInterval !== null) {
+		        clearInterval(pollingInterval);
+		        pollingInterval = null;
+		    }
+		}
+
+		// Event listener to start polling when the user focuses on the input field
+		document.getElementById('codeInput').addEventListener('focus', function() {
+		    isFocused = true;
+		    startPolling(); // Start polling when focused
+		});
+
+		// Event listener to stop polling when the user blurs (unfocuses) the input field
+		document.getElementById('codeInput').addEventListener('blur', function() {
+		    isFocused = false;
+		    stopPolling(); // Stop polling when unfocused
+		});
+
+		// Form submission to trigger error checking
+		document.getElementById('codeForm').addEventListener('submit', function(event) {
+		    event.preventDefault();
+		    checkCodeErrors(); // Manually check code when form is submitted
+		});
+
     </script>
 </body>
 </html>
