@@ -2,6 +2,11 @@
 
 A simple, web-based Java code checker built with **Spring Boot**, **Thymeleaf**, and **Axios**. This app allows users to input Java code into a text area and receive real-time feedback on basic syntax issues like missing semicolons.
 
+## 🌐 Live Demo
+
+Try the app live on Render:  
+👉 [checkyourcode.onrender.com](https://checkyourcode.onrender.com/)
+
 ## ⚙️ Features
 
 - 🌐 Web UI built with HTML, CSS, and JavaScript (Axios)
@@ -26,7 +31,7 @@ A simple, web-based Java code checker built with **Spring Boot**, **Thymeleaf**,
 ## 📁 Project Structure
 
 ```
-code-error-checker/
+code-checker/
 ├── src/
 │   └── main/
 │       ├── java/
@@ -73,7 +78,7 @@ code-error-checker/
 
 ```bash
 # Clone the repository
-git clone https://github.com/azzomi-dev/code-error-checker.git
+git clone https://github.com/azzomi-dev/codechecker.git
 cd code-error-checker
 
 # Build and run the application
