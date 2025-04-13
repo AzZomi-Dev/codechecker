@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Code Error Checker</title>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f7fc;
+            color: #333;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .container {
+            background: #ffffff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            border-radius: 8px;
+            width: 80%;
+            max-width: 800px;
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 24px;
+            margin-bottom: 20px;
+            color: #5b5b5b;
+        }
+
+        textarea {
+            width: 100%;
+            height: 150px;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            font-size: 16px;
+            font-family: 'Courier New', Courier, monospace;
+            resize: none;
+            transition: border 0.3s ease;
+        }
+
+        textarea:focus {
+            border-color: #007bff;
+            outline: none;
+        }
+
+        button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 15px;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        #errorMessages {
+            margin-top: 20px;
+        }
+
+        #errorMessages ul {
+            list-style-type: none;
+            padding-left: 0;
+            color: #d9534f;
+        }
+
+        #errorMessages li {
+            background: #f8d7da;
+            padding: 8px;
+            border-radius: 5px;
+            margin: 5px 0;
+        }
+
+        #errorMessages p {
+            color: #5bc0de;
+            font-size: 16px;
+        }
+    </style>
+
+</head>
+<body>
+
+    <div class="container">
+        <h1>Code Error Checker</h1>
+        <form id="codeForm" action="#" method="POST">
+            <textarea id="codeInput" name="code" rows="10" cols="50"></textarea><br>
+            <button type="submit">Submit</button>
+        </form>
+        <div id="errorMessages"></div>
+    </div>
+
+    <script>
+        // Function to check code errors using polling
+        function checkCodeErrors() {
+            const code = document.getElementById('codeInput').value;
+
+            axios.post('/check-code', { code: code })
+                .then(response => {
+                    const errors = response.data.errors;
+                    let errorMessages = '';
+                    if (errors.length > 0) {
+                        errorMessages = '<ul>';
+                        errors.forEach(error => {
+                            errorMessages += `<li>${error}</li>`;
+                        });
+                        errorMessages += '</ul>';
+                    } else {
+                        errorMessages = '<p>No errors found!</p>';
+                    }
+                    document.getElementById('errorMessages').innerHTML = errorMessages;
+                })
+                .catch(error => {
+                    console.error('Error checking code:', error);
+                });
+        }
+
+        // Polling every 3 seconds
+        setInterval(checkCodeErrors, 3000);
+
+        // Form submission to trigger error checking
+        document.getElementById('codeForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            checkCodeErrors();
+        });
+    </script>
+</body>
+</html>
