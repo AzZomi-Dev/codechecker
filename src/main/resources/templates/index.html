@@ -6,90 +6,101 @@
     <title>Code Error Checker</title>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f7fc;
-            color: #333;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-        }
+	<style>
+		* {
+		    box-sizing: border-box;
+		}
+	    body {
+	        font-family: Arial, sans-serif;
+	        background-color: #2e3b2e; /* Dark green background */
+	        color: #f0f4f1; /* Light off-white text color for contrast */
+	        margin: 0;
+	        padding: 0;
+	        display: flex;
+	        justify-content: center;
+	        align-items: center;
+	        height: 100vh;
+	    }
 
-        .container {
-            background: #ffffff;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            padding: 30px;
-            border-radius: 8px;
-            width: 80%;
-            max-width: 800px;
-        }
+	    .container {
+	        background: #3a4d3a; /* Dark green with a slight difference from the body for contrast */
+	        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+	        padding: 30px;
+	        border-radius: 8px;
+	        width: 80%;
+	        max-width: 800px;
+	    }
 
-        h1 {
-            text-align: center;
-            font-size: 24px;
-            margin-bottom: 20px;
-            color: #5b5b5b;
-        }
+	    h1 {
+	        text-align: center;
+	        font-size: 24px;
+	        margin-bottom: 20px;
+	        color: #e1f1e1; /* Light green text color for header */
+	        font-weight: bold; /* Bold title for emphasis */
+	    }
 
-        textarea {
-            width: 100%;
-            height: 150px;
-            padding: 10px;
-            border-radius: 5px;
-            border: 1px solid #ccc;
-            font-size: 16px;
-            font-family: 'Courier New', Courier, monospace;
-            resize: none;
-            transition: border 0.3s ease;
-        }
+	    textarea {
+	        width: 100%;
+	        height: 150px;
+	        padding: 10px;
+	        border-radius: 5px;
+	        border: 5px solid #4c7a4c; /* Thicker border for textarea */
+	        background-color: #4a5d4a; /* Slightly lighter green background */
+	        color: #f0f4f1; /* Light text color for readability */
+	        font-size: 16px;
+	        font-family: 'Courier New', Courier, monospace;
+	        resize: none;
+	        transition: border 0.3s ease;
+	    }
 
-        textarea:focus {
-            border-color: #007bff;
-            outline: none;
-        }
+	    textarea:focus {
+	        border-color: #6f8a6f; /* Focused textarea border with a brighter green */
+	        outline: none;
+	        border-width: px; /* Bold border on focus */
+	    }
 
-        button {
-            background-color: #007bff;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 16px;
-            margin-top: 15px;
-            transition: background-color 0.3s ease;
-        }
+	    button {
+	        background-color: #5a8f5a; /* Soft green background */
+	        color: white;
+	        border: 2px solid #4c7a4c; /* Thicker border for button */
+	        padding: 10px 20px;
+	        border-radius: 5px;
+	        cursor: pointer;
+	        font-size: 16px;
+	        margin-top: 15px;
+	        font-weight: bold; /* Bold button text for emphasis */
+	        transition: background-color 0.3s ease;
+	    }
 
-        button:hover {
-            background-color: #0056b3;
-        }
+	    button:hover {
+	        background-color: #4c7a4c; /* Darker green on hover */
+	    }
 
-        #errorMessages {
-            margin-top: 20px;
-        }
+	    #errorMessages {
+	        margin-top: 20px;
+	    }
 
-        #errorMessages ul {
-            list-style-type: none;
-            padding-left: 0;
-            color: #d9534f;
-        }
+	    #errorMessages ul {
+	        list-style-type: none;
+	        padding-left: 0;
+	        color: #d9534f; /* Red color for errors */
+	    }
 
-        #errorMessages li {
-            background: #f8d7da;
-            padding: 8px;
-            border-radius: 5px;
-            margin: 5px 0;
-        }
+	    #errorMessages li {
+	        background: #f8d7da;
+	        padding: 8px;
+	        border-radius: 5px;
+	        margin: 5px 0;
+	        font-weight: bold; /* Bold error message text for more visibility */
+	    }
 
-        #errorMessages p {
-            color: #5bc0de;
-            font-size: 16px;
-        }
-    </style>
+	    #errorMessages p {
+	        color: #5bc0de; /* Light blue color for informational messages */
+	        font-size: 16px;
+	        font-weight: bold; /* Bold text for important information */
+	    }
+	</style>
+
 
 </head>
 <body>
