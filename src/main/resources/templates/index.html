@@ -6,104 +6,161 @@
     <title>Code Error Checker</title>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 
-	<style>
-		* {
-		    box-sizing: border-box;
-		}
-	    body {
-	        font-family: Arial, sans-serif;
-	        background-color: #2e3b2e; /* Dark green background */
-	        color: #f0f4f1; /* Light off-white text color for contrast */
-	        margin: 0;
-	        padding: 0;
-	        display: flex;
-	        justify-content: center;
-	        align-items: center;
-	        height: 100vh;
-	    }
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #2e3b2e; /* Dark green background */
+            color: #f0f4f1; /* Light off-white text color for contrast */
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+            transition: background-color 0.3s ease;
+        }
 
-	    .container {
-	        background: #3a4d3a; /* Dark green with a slight difference from the body for contrast */
-	        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-	        padding: 30px;
-	        border-radius: 8px;
-	        width: 80%;
-	        max-width: 800px;
-	    }
+        .container {
+            background: #3a4d3a; /* Dark green with a slight difference from the body for contrast */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            padding: 30px;
+            border-radius: 8px;
+            width: 80%;
+            max-width: 800px;
+            position: relative;
+            z-index: 1; /* Ensure content stays above overlay */
+        }
 
-	    h1 {
-	        text-align: center;
-	        font-size: 24px;
-	        margin-bottom: 20px;
-	        color: #e1f1e1; /* Light green text color for header */
-	        font-weight: bold; /* Bold title for emphasis */
-	    }
+        h1 {
+            text-align: center;
+            font-size: 24px;
+            margin-bottom: 20px;
+            color: #e1f1e1; /* Light green text color for header */
+            font-weight: bold; /* Bold title for emphasis */
+        }
 
-	    textarea {
-	        width: 100%;
-	        height: 150px;
-	        padding: 10px;
-	        border-radius: 5px;
-	        border: 5px solid #4c7a4c; /* Thicker border for textarea */
-	        background-color: #4a5d4a; /* Slightly lighter green background */
-	        color: #f0f4f1; /* Light text color for readability */
-	        font-size: 16px;
-	        font-family: 'Courier New', Courier, monospace;
-	        resize: none;
-	        transition: border 0.3s ease;
-	    }
+        textarea {
+            width: 100%;
+            height: 150px;
+            padding: 10px;
+            border-radius: 5px;
+            border: 5px solid #4c7a4c; /* Thicker border for textarea */
+            background-color: #4a5d4a; /* Slightly lighter green background */
+            color: #f0f4f1; /* Light text color for readability */
+            font-size: 16px;
+            font-family: 'Courier New', Courier, monospace;
+            resize: none;
+            transition: border 0.3s ease;
+        }
 
-	    textarea:focus {
-	        border-color: #6f8a6f; /* Focused textarea border with a brighter green */
-	        outline: none;
-	        border-width: px; /* Bold border on focus */
-	    }
+        textarea:focus {
+            border-color: #6f8a6f; /* Focused textarea border with a brighter green */
+            outline: none;
+            border-width: 3px; /* Bold border on focus */
+        }
 
-	    button {
-	        background-color: #5a8f5a; /* Soft green background */
-	        color: white;
-	        border: 2px solid #4c7a4c; /* Thicker border for button */
-	        padding: 10px 20px;
-	        border-radius: 5px;
-	        cursor: pointer;
-	        font-size: 16px;
-	        margin-top: 15px;
-	        font-weight: bold; /* Bold button text for emphasis */
-	        transition: background-color 0.3s ease;
-	    }
+        button {
+            background-color: #5a8f5a; /* Soft green background */
+            color: white;
+            border: 2px solid #4c7a4c; /* Thicker border for button */
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 15px;
+            font-weight: bold; /* Bold button text for emphasis */
+            transition: background-color 0.3s ease;
+        }
 
-	    button:hover {
-	        background-color: #4c7a4c; /* Darker green on hover */
-	    }
+        button:hover {
+            background-color: #4c7a4c; /* Darker green on hover */
+        }
 
-	    #errorMessages {
-	        margin-top: 20px;
-	    }
+        #errorMessages {
+            margin-top: 20px;
+        }
 
-	    #errorMessages ul {
-	        list-style-type: none;
-	        padding-left: 0;
-	        color: #d9534f; /* Red color for errors */
-	    }
+        #errorMessages ul {
+            list-style-type: none;
+            padding-left: 0;
+            color: #d9534f; /* Red color for errors */
+        }
 
-	    #errorMessages li {
-	        background: #f8d7da;
-	        padding: 8px;
-	        border-radius: 5px;
-	        margin: 5px 0;
-	        font-weight: bold; /* Bold error message text for more visibility */
-	    }
+        #errorMessages li {
+            background: #f8d7da;
+            padding: 8px;
+            border-radius: 5px;
+            margin: 5px 0;
+            font-weight: bold; /* Bold error message text for more visibility */
+        }
 
-	    #errorMessages p {
-	        color: #5bc0de; /* Light blue color for informational messages */
-	        font-size: 16px;
-	        font-weight: bold; /* Bold text for important information */
-	    }
-	</style>
+        #errorMessages p {
+            color: #5bc0de; /* Light blue color for informational messages */
+            font-size: 16px;
+            font-weight: bold; /* Bold text for important information */
+        }
 
+        /* Loading Indicator styles */
+        #loadingIndicator {
+            position: fixed; /* Fix the position of the loading overlay */
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7); /* Dark semi-transparent background */
+            display: none; /* Initially hidden */
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            z-index: 999; /* Ensure it's on top of all content */
+            transition: opacity 0.3s ease-in-out;
+        }
 
+        #loadingIndicator.show {
+            display: flex;
+            opacity: 1; /* Fade in effect when shown */
+        }
+
+        /* Spinner animation */
+        .spinner {
+            border: 4px solid #f0f4f1; /* Light color for spinner border */
+            border-top: 4px solid #5a8f5a; /* Soft green for the rotating part */
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin-bottom: 15px;
+        }
+
+        /* Spinner animation keyframe */
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* Loading text styling */
+        #loadingIndicator p {
+            font-size: 18px;
+            color: #f0f4f1;
+            font-weight: bold;
+        }
+
+    </style>
 </head>
 <body>
+
+    <div id="loadingIndicator" class="loading">
+        <div class="spinner"></div> <!-- Spinner element -->
+        <p>Loading...</p>
+    </div>
 
     <div class="container">
         <h1>Code Error Checker</h1>
@@ -115,66 +172,76 @@
     </div>
 
     <script>
-		let pollingInterval = null; // Holds the polling interval
-		let isFocused = false; // Tracks whether the input is focused
+        let pollingInterval = null; // Holds the polling interval
+        let isFocused = false; // Tracks whether the input is focused
 
-		// Function to check code errors using polling
-		function checkCodeErrors() {
-		    const code = document.getElementById('codeInput').value;
+        // Function to check code errors using polling
+        function checkCodeErrors() {
+            const code = document.getElementById('codeInput').value;
 
-		    axios.post('/check-code', { code: code })
-		        .then(response => {
-		            const errors = response.data.errors;
-		            let errorMessages = '';
-		            if (errors.length > 0) {
-		                errorMessages = '<ul>';
-		                errors.forEach(error => {
-		                    errorMessages += `<li>${error}</li>`;
-		                });
-		                errorMessages += '</ul>';
-		            } else {
-		                errorMessages = '<p>No errors found!</p>';
-		            }
-		            document.getElementById('errorMessages').innerHTML = errorMessages;
-		        })
-		        .catch(error => {
-		            console.error('Error checking code:', error);
-		        });
-		}
+            axios.post('/check-code', { code: code })
+                .then(response => {
+                    const errors = response.data.errors;
+                    let errorMessages = '';
+                    if (errors.length > 0) {
+                        errorMessages = '<ul>';
+                        errors.forEach(error => {
+                            errorMessages += `<li>${error}</li>`;
+                        });
+                        errorMessages += '</ul>';
+                    } else {
+                        errorMessages = '<p>No errors found!</p>';
+                    }
+                    document.getElementById('errorMessages').innerHTML = errorMessages;
+                })
+                .catch(error => {
+                    console.error('Error checking code:', error);
+                });
+        }
 
-		// Start polling if the user is focused
-		function startPolling() {
-		    if (pollingInterval === null) {
-		        pollingInterval = setInterval(checkCodeErrors, 3000);
-		    }
-		}
+        // Start polling if the user is focused
+        function startPolling() {
+            if (pollingInterval === null) {
+                pollingInterval = setInterval(checkCodeErrors, 3000);
+            }
+        }
 
-		// Stop polling when the user is not focused
-		function stopPolling() {
-		    if (pollingInterval !== null) {
-		        clearInterval(pollingInterval);
-		        pollingInterval = null;
-		    }
-		}
+        // Stop polling when the user is not focused
+        function stopPolling() {
+            if (pollingInterval !== null) {
+                clearInterval(pollingInterval);
+                pollingInterval = null;
+            }
+        }
 
-		// Event listener to start polling when the user focuses on the input field
-		document.getElementById('codeInput').addEventListener('focus', function() {
-		    isFocused = true;
-		    startPolling(); // Start polling when focused
-		});
+        // Event listener to start polling when the user focuses on the input field
+        document.getElementById('codeInput').addEventListener('focus', function() {
+            isFocused = true;
+            startPolling(); // Start polling when focused
+        });
 
-		// Event listener to stop polling when the user blurs (unfocuses) the input field
-		document.getElementById('codeInput').addEventListener('blur', function() {
-		    isFocused = false;
-		    stopPolling(); // Stop polling when unfocused
-		});
+        // Event listener to stop polling when the user blurs (unfocuses) the input field
+        document.getElementById('codeInput').addEventListener('blur', function() {
+            isFocused = false;
+            stopPolling(); // Stop polling when unfocused
+        });
 
-		// Form submission to trigger error checking
-		document.getElementById('codeForm').addEventListener('submit', function(event) {
-		    event.preventDefault();
-		    checkCodeErrors(); // Manually check code when form is submitted
-		});
+        // Form submission to trigger error checking
+        document.getElementById('codeForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            checkCodeErrors(); // Manually check code when form is submitted
+        });
 
+        // Show loading indicator when the page is loading
+        window.addEventListener('load', function() {
+            const loadingIndicator = document.getElementById('loadingIndicator');
+            loadingIndicator.classList.add('show'); // Show loading indicator
+
+            // Hide the loading indicator after the page has fully loaded
+            setTimeout(() => {
+                loadingIndicator.classList.remove('show'); // Hide loading indicator
+            }, 1000); // You can adjust the duration if needed
+        });
     </script>
 </body>
 </html>
